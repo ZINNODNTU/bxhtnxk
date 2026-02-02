@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Xếp Hạng TNXK </title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --gold: #fbbf24;
+            --silver: #94a3b8;
+            --bronze: #b45309;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; }
+
+        .container { max-width: 800px; margin: 0 auto; }
+
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+        .last-update { font-size: 13px; color: #64748b; }
+
+        /* PODIUM STYLE */
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 15px;
+            margin-bottom: 50px;
+            height: 300px;
+        }
+
+        .podium-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .podium-item:hover { transform: translateY(-5px); }
+
+        .podium-card {
+            width: 100%;
+            background: var(--surface);
+            border-radius: 16px 16px 8px 8px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+            position: relative;
+            text-align: center;
+        }
+
+        .p-1 { height: 200px; order: 2; border-top: 5px solid var(--gold); }
+        .p-2 { height: 160px; order: 1; border-top: 5px solid var(--silver); }
+        .p-3 { height: 130px; order: 3; border-top: 5px solid var(--bronze); }
+
+        .medal-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            margin-top: -35px;
+            background: var(--bg);
+            border-radius: 50%;
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .podium-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+        .podium-class { font-size: 11px; color: #64748b; margin-bottom: 10px; }
+        .podium-score { font-size: 28px; font-weight: 800; color: var(--primary); }
+        .podium-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+        /* TABLE STYLE */
+        .list-container {
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f1f5f9; padding: 15px; text-align: left; font-size: 12px; text-transform: uppercase; color: #64748b; }
+        td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+
+        .rank-box {
+            width: 28px; height: 28px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; font-size: 12px; background: #f1f5f9;
+        }
+
+        .name-cell { font-weight: 600; }
+        .score-cell { font-weight: 800; color: var(--primary); text-align: center; font-size: 16px; }
+
+        /* LOADING */
+        #loader {
+            position: fixed; inset: 0; background: var(--bg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100;
+        }
+        .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 500px) {
+            .podium { height: auto; align-items: center; flex-direction: column; gap: 40px; }
+            .podium-item { width: 100%; }
+            .p-1, .p-2, .p-3 { height: auto; order: initial; border-radius: 16px; border-top: none; border-left: 5px solid; }
+            .p-1 { border-left-color: var(--gold); }
+            .p-2 { border-left-color: var(--silver); }
+            .p-3 { border-left-color: var(--bronze); }
+            .medal-icon { margin-top: 0; position: absolute; left: -20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; font-weight: 600;">Đang tính điểm...</p>
+    </div>
+
+    <div class="container">
+        <header>
+<h1>
+  <i class="fa-solid fa-trophy"></i> 
+  BẢNG XẾP HẠNG TNXK<br>
+  ĐOÀN Khoa Công nghệ thông tin - Truyền thông
+</h1>
+            <div class="last-update" id="lastUpdate">Đang đồng bộ dữ liệu...</div>
+        </header>
+
+        <div class="podium" id="podium">
+            <!-- Top 3 Render Here -->
+        </div>
+
+        <div class="list-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th width="60">Hạng</th>
+                        <th>Thành viên</th>
+                        <th>Lớp</th>
+                        <th width="100" style="text-align: center;">Số lần trực</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- Others Render Here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<script>
+    const URL_STUDENTS = "https://opensheet.elk.sh/1hd1-8lo1DxPOGrPwizlvcF7xPdyu9_dzvzwyziGjmfE/Câu trả lời biểu mẫu 1";
+    const URL_TNXK = "https://opensheet.elk.sh/1WagQ3FSkESeaYWZurfH2XmjXKB7TdSTxa29k4-nNceM/TONG HOP";
+
+    async function fetchData() {
+        try {
+            const [resStudents, resTNXK] = await Promise.all([
+                fetch(URL_STUDENTS).then(r => r.json()),
+                fetch(URL_TNXK).then(r => r.json())
+            ]);
+
+            // 1. Lấy thông tin cơ bản từ danh sách sinh viên chính thức
+            const studentInfo = {};
+            resStudents.forEach(s => {
+                const mssv = s["Mã số sinh viên:"]?.toString().trim();
+                if (mssv) {
+                    studentInfo[mssv] = {
+                        name: formatName(s["Họ Tên:"]),
+                        class: s["Chi đoàn trực thuộc:"]
+                    };
+                }
+            });
+
+            // 2. Xử lý cộng dồn buổi trực từ file TNXK
+            const scores = {};
+            resTNXK.forEach(row => {
+                const mssv = row["MSSV"]?.toString().trim();
+                if (!mssv) return;
+
+                let rowTotal = 0;
+                Object.keys(row).forEach(key => {
+                    // Loại bỏ các cột thông tin, chỉ đếm cột điểm danh
+                    if (key !== "MSSV" && key !== "Họ Tên" && key !== "Lớp" && !key.includes("STT")) {
+                        const val = row[key]?.toString().toLowerCase().trim();
+                        if (val === 'x' || val === '1' || val === 'v') {
+                            rowTotal++;
+                        }
+                    }
+                });
+
+                scores[mssv] = (scores[mssv] || 0) + rowTotal;
+            });
+
+            // 3. Lọc và Sắp xếp: CHỈ TÍNH NHỮNG NGƯỜI CÓ TRONG FILE URL_STUDENTS
+            const sortedData = Object.keys(scores)
+                .filter(mssv => studentInfo[mssv]) // QUAN TRỌNG: Chỉ giữ lại MSSV có trong danh sách chính thức
+                .map(mssv => ({
+                    mssv,
+                    count: scores[mssv],
+                    name: studentInfo[mssv].name,
+                    class: studentInfo[mssv].class
+                }))
+                .filter(item => item.count > 0) // Chỉ hiển thị người có ít nhất 1 buổi trực
+                .sort((a, b) => b.count - a.count);
+
+            renderUI(sortedData);
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("lastUpdate").innerText = `Cập nhật lúc: ${new Date().toLocaleTimeString('vi-VN')} - ${new Date().toLocaleDateString('vi-VN')}`;
+
+        } catch (error) {
+            console.error(error);
+            alert("Không thể tải dữ liệu. Vui lòng kiểm tra kết nối!");
+        }
+    }
+
+    function renderUI(data) {
+        const podiumEl = document.getElementById("podium");
+        const bodyEl = document.getElementById("leaderboardBody");
+        
+        // Render Podium (Top 3)
+        const top3 = data.slice(0, 3);
+        const medals = ["🥇", "🥈", "🥉"];
+        
+        if (top3.length > 0) {
+            podiumEl.innerHTML = top3.map((item, index) => `
+                <div class="podium-item p-${index + 1}">
+                    <div class="medal-icon">${medals[index]}</div>
+                    <div class="podium-card p-${index + 1}">
+                        <div class="podium-name">${item.name}</div>
+                        <div class="podium-class">${item.class}</div>
+                        <div class="podium-score">${item.count}</div>
+                        <div class="podium-label">Buổi trực</div>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            podiumEl.innerHTML = "<p>Chưa có dữ liệu xếp hạng</p>";
+        }
+
+        // Render List (Toàn bộ danh sách)
+        bodyEl.innerHTML = data.map((item, index) => `
+            <tr>
+                <td><div class="rank-box">${index + 1}</div></td>
+                <td>
+                    <div class="name-cell">${item.name}</div>
+                    <div style="font-size:11px; color:#94a3b8">${item.mssv}</div>
+                </td>
+                <td>${item.class}</td>
+                <td class="score-cell">${item.count}</td>
+            </tr>
+        `).join('');
+    }
+
+    function formatName(str) {
+        if (!str) return "";
+        return str.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+    }
+
+    window.onload = fetchData;
+</script>
+</body>
+</html>
