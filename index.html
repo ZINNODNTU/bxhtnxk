@@ -3,269 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Xếp Hạng TNXK </title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>Elite Leaderboard | TNXK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --gold: #fbbf24;
-            --silver: #94a3b8;
-            --bronze: #b45309;
-            --bg: #f8fafc;
-            --surface: #ffffff;
-            --text: #1e293b;
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --gold: #ffcf4b;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 20px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-        .container { max-width: 800px; margin: 0 auto; }
-
-        header { text-align: center; margin-bottom: 40px; }
-        header h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
-        .last-update { font-size: 13px; color: #64748b; }
-
-        /* PODIUM STYLE */
-        .podium {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 15px;
-            margin-bottom: 50px;
-            height: 300px;
-        }
-
-        .podium-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.3s ease;
-        }
-
-        .podium-item:hover { transform: translateY(-5px); }
-
-        .podium-card {
-            width: 100%;
-            background: var(--surface);
-            border-radius: 16px 16px 8px 8px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px 10px;
-            position: relative;
-            text-align: center;
-        }
-
-        .p-1 { height: 200px; order: 2; border-top: 5px solid var(--gold); }
-        .p-2 { height: 160px; order: 1; border-top: 5px solid var(--silver); }
-        .p-3 { height: 130px; order: 3; border-top: 5px solid var(--bronze); }
-
-        .medal-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-            margin-top: -35px;
+        body {
             background: var(--bg);
-            border-radius: 50%;
-            width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 50px;
         }
 
-        .podium-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
-        .podium-class { font-size: 11px; color: #64748b; margin-bottom: 10px; }
-        .podium-score { font-size: 28px; font-weight: 800; color: var(--primary); }
-        .podium-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-
-        /* TABLE STYLE */
-        .list-container {
-            background: var(--surface);
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            overflow: hidden;
+        /* Nền Gradient mờ ảo */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.15) 0%, transparent 40%);
+            z-index: -1;
         }
 
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f1f5f9; padding: 15px; text-align: left; font-size: 12px; text-transform: uppercase; color: #64748b; }
-        td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
 
-        .rank-box {
-            width: 28px; height: 28px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            font-weight: 700; font-size: 12px; background: #f1f5f9;
+        header { text-align: left; margin: 40px 0; }
+        header h1 { 
+            font-size: clamp(2rem, 8vw, 3.5rem); 
+            font-weight: 800; line-height: 1; 
+            letter-spacing: -2px; margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #666);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .live-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0, 242, 255, 0.1); color: var(--primary);
+            padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 600;
+        }
+        .live-dot { width: 6px; height: 6px; background: var(--primary); border-radius: 50%; animation: pulse 1.5s infinite; }
+
+        /* Top 3 Spotlight */
+        .spotlight {
+            display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 40px;
         }
 
-        .name-cell { font-weight: 600; }
-        .score-cell { font-weight: 800; color: var(--primary); text-align: center; font-size: 16px; }
+        .top-1-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--border); border-radius: 32px;
+            padding: 40px; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            min-height: 350px;
+        }
+        .top-1-card::before {
+            content: "01"; position: absolute; top: -20px; right: -10px;
+            font-size: 200px; font-weight: 800; opacity: 0.05; color: var(--gold);
+        }
+        .top-1-card .crown { color: var(--gold); font-size: 40px; margin-bottom: 20px; }
+        .top-1-name { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
+        .top-1-score { font-size: 64px; font-weight: 800; color: var(--primary); line-height: 1; }
 
-        /* LOADING */
+        .top-side { display: flex; flex-direction: column; gap: 20px; }
+        .side-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 24px; padding: 20px; flex: 1;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .side-rank { font-size: 12px; font-weight: 600; color: #888; margin-bottom: 5px; }
+        .side-name { font-size: 18px; font-weight: 700; }
+        .side-score { font-size: 28px; font-weight: 800; color: #fff; }
+
+        /* Search & List */
+        .controls { margin-bottom: 20px; }
+        .search-wrapper { position: relative; }
+        .search-wrapper i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #555; }
+        #searchInput {
+            width: 100%; background: var(--card-bg); border: 1px solid var(--border);
+            padding: 18px 20px 18px 55px; border-radius: 20px; color: #fff; outline: none;
+            font-size: 16px; transition: 0.3s;
+        }
+        #searchInput:focus { background: rgba(255,255,255,0.05); border-color: var(--primary); }
+
+        .list-container { display: flex; flex-direction: column; gap: 10px; }
+        .row-item {
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 15px 25px; border-radius: 20px;
+            display: grid; grid-template-columns: 50px 1fr 100px; align-items: center;
+            transition: 0.3s;
+        }
+        .row-item:hover { transform: translateX(10px); background: rgba(255,255,255,0.05); border-color: var(--primary); }
+        
+        .row-rank { font-weight: 800; color: #444; font-size: 18px; }
+        .row-name { font-weight: 600; font-size: 16px; }
+        .row-class { font-size: 12px; color: #666; }
+        .row-score { text-align: right; font-weight: 800; color: var(--primary); font-size: 20px; }
+
+        /* Loading */
         #loader {
             position: fixed; inset: 0; background: var(--bg);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 100;
+            display: flex; align-items: center; justify-content: center; z-index: 1000;
         }
-        .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-circle {
+            width: 60px; height: 60px; border: 2px solid var(--border);
+            border-top: 2px solid var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
 
-        @media (max-width: 500px) {
-            .podium { height: auto; align-items: center; flex-direction: column; gap: 40px; }
-            .podium-item { width: 100%; }
-            .p-1, .p-2, .p-3 { height: auto; order: initial; border-radius: 16px; border-top: none; border-left: 5px solid; }
-            .p-1 { border-left-color: var(--gold); }
-            .p-2 { border-left-color: var(--silver); }
-            .p-3 { border-left-color: var(--bronze); }
-            .medal-icon { margin-top: 0; position: absolute; left: -20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        @media (max-width: 768px) {
+            .spotlight { grid-template-columns: 1fr; }
+            .top-1-card { min-height: 250px; padding: 30px; }
+            header h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="spinner"></div>
-        <p style="margin-top: 15px; font-weight: 600;">Đang tính điểm...</p>
+<div id="loader"><div class="loader-circle"></div></div>
+<div class="mesh-bg"></div>
+
+<div class="container">
+    <header>
+        <div class="live-tag"><div class="live-dot"></div> DATA LIVE</div>
+        <h1>Ranking<br>TNXK.</h1>
+        <p style="color: #666; margin-left: 5px;">Hệ thống ghi nhận buổi trực Đoàn Khoa CNTT-TT</p>
+    </header>
+
+    <div class="spotlight" id="spotlightArea">
+        <!-- Render Top 3 theo kiểu Bento -->
     </div>
 
-    <div class="container">
-        <header>
-<h1>
-  <i class="fa-solid fa-trophy"></i> 
-  BẢNG XẾP HẠNG TNXK<br>
-  Đoàn Khoa Công nghệ thông tin - Truyền thông
-</h1>
-            <div class="last-update" id="lastUpdate">Đang đồng bộ dữ liệu...</div>
-        </header>
-
-        <div class="podium" id="podium">
-            <!-- Top 3 Render Here -->
-        </div>
-
-        <div class="list-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th width="60">Hạng</th>
-                        <th>Thành viên</th>
-                        <th>Lớp</th>
-                        <th width="100" style="text-align: center;">Số ca trực</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboardBody">
-                    <!-- Others Render Here -->
-                </tbody>
-            </table>
+    <div class="controls">
+        <div class="search-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Tìm tên thành viên...">
         </div>
     </div>
+
+    <div class="list-container" id="listArea">
+        <!-- Render Others -->
+    </div>
+</div>
 
 <script>
     const URL_STUDENTS = "https://opensheet.elk.sh/1hd1-8lo1DxPOGrPwizlvcF7xPdyu9_dzvzwyziGjmfE/Câu trả lời biểu mẫu 1";
     const URL_TNXK = "https://opensheet.elk.sh/1WagQ3FSkESeaYWZurfH2XmjXKB7TdSTxa29k4-nNceM/TONG HOP";
 
-    async function fetchData() {
+    let fullData = [];
+
+    async function init() {
         try {
-            const [resStudents, resTNXK] = await Promise.all([
+            const [resS, resT] = await Promise.all([
                 fetch(URL_STUDENTS).then(r => r.json()),
                 fetch(URL_TNXK).then(r => r.json())
             ]);
 
-            // 1. Lấy thông tin cơ bản từ danh sách sinh viên chính thức
-            const studentInfo = {};
-            resStudents.forEach(s => {
+            const studentMap = {};
+            resS.forEach(s => {
                 const mssv = s["Mã số sinh viên:"]?.toString().trim();
-                if (mssv) {
-                    studentInfo[mssv] = {
-                        name: formatName(s["Họ Tên:"]),
-                        class: s["Chi đoàn trực thuộc:"]
-                    };
-                }
+                if (mssv) studentMap[mssv] = { name: formatName(s["Họ Tên:"]), class: s["Chi đoàn trực thuộc:"] };
             });
 
-            // 2. Xử lý cộng dồn buổi trực từ file TNXK
-            const scores = {};
-            resTNXK.forEach(row => {
+            const scoreMap = {};
+            resT.forEach(row => {
                 const mssv = row["MSSV"]?.toString().trim();
                 if (!mssv) return;
-
-                let rowTotal = 0;
-                Object.keys(row).forEach(key => {
-                    // Loại bỏ các cột thông tin, chỉ đếm cột điểm danh
-                    if (key !== "MSSV" && key !== "Họ Tên" && key !== "Lớp" && !key.includes("STT")) {
-                        const val = row[key]?.toString().toLowerCase().trim();
-                        if (val === 'x' || val === '1' || val === 'v') {
-                            rowTotal++;
-                        }
+                let count = 0;
+                Object.keys(row).forEach(k => {
+                    if (!["MSSV", "Họ Tên", "Lớp", "STT"].some(ex => k.includes(ex))) {
+                        const v = row[k]?.toString().toLowerCase();
+                        if (v === 'x' || v === '1' || v === 'v') count++;
                     }
                 });
-
-                scores[mssv] = (scores[mssv] || 0) + rowTotal;
+                scoreMap[mssv] = (scoreMap[mssv] || 0) + count;
             });
 
-            // 3. Lọc và Sắp xếp: CHỈ TÍNH NHỮNG NGƯỜI CÓ TRONG FILE URL_STUDENTS
-            const sortedData = Object.keys(scores)
-                .filter(mssv => studentInfo[mssv]) // QUAN TRỌNG: Chỉ giữ lại MSSV có trong danh sách chính thức
-                .map(mssv => ({
-                    mssv,
-                    count: scores[mssv],
-                    name: studentInfo[mssv].name,
-                    class: studentInfo[mssv].class
-                }))
-                .filter(item => item.count > 0) // Chỉ hiển thị người có ít nhất 1 buổi trực
+            fullData = Object.keys(scoreMap)
+                .filter(mssv => studentMap[mssv])
+                .map(mssv => ({ mssv, count: scoreMap[mssv], ...studentMap[mssv] }))
+                .filter(i => i.count > 0)
                 .sort((a, b) => b.count - a.count);
 
-            renderUI(sortedData);
+            renderUI(fullData);
             document.getElementById("loader").style.display = "none";
-            document.getElementById("lastUpdate").innerText = `Cập nhật lúc: ${new Date().toLocaleTimeString('vi-VN')} - ${new Date().toLocaleDateString('vi-VN')}`;
-
-        } catch (error) {
-            console.error(error);
-            alert("Không thể tải dữ liệu. Vui lòng kiểm tra kết nối!");
-        }
+        } catch (e) { console.error(e); }
     }
 
     function renderUI(data) {
-        const podiumEl = document.getElementById("podium");
-        const bodyEl = document.getElementById("leaderboardBody");
-        
-        // Render Podium (Top 3)
-        const top3 = data.slice(0, 3);
-        const medals = ["🥇", "🥈", "🥉"];
-        
-        if (top3.length > 0) {
-            podiumEl.innerHTML = top3.map((item, index) => `
-                <div class="podium-item p-${index + 1}">
-                    <div class="medal-icon">${medals[index]}</div>
-                    <div class="podium-card p-${index + 1}">
-                        <div class="podium-name">${item.name}</div>
-                        <div class="podium-class">${item.class}</div>
-                        <div class="podium-score">${item.count}</div>
-                        <div class="podium-label">Ca trực</div>
-                    </div>
-                </div>
-            `).join('');
-        } else {
-            podiumEl.innerHTML = "<p>Chưa có dữ liệu xếp hạng</p>";
-        }
+        const spotlightArea = document.getElementById("spotlightArea");
+        const listArea = document.getElementById("listArea");
 
-        // Render List (Toàn bộ danh sách)
-        bodyEl.innerHTML = data.map((item, index) => `
-            <tr>
-                <td><div class="rank-box">${index + 1}</div></td>
-                <td>
-                    <div class="name-cell">${item.name}</div>
-                    <div style="font-size:11px; color:#94a3b8">${item.mssv}</div>
-                </td>
-                <td>${item.class}</td>
-                <td class="score-cell">${item.count}</td>
-            </tr>
+        const top1 = data[0];
+        const top2 = data[1];
+        const top3 = data[2];
+
+        spotlightArea.innerHTML = `
+            <div class="top-1-card">
+                <i class="fa-solid fa-crown crown"></i>
+                <div>
+                    <div class="top-1-name">${top1?.name || "---"}</div>
+                    <div style="color:#888; font-size:14px; margin-bottom:15px">${top1?.class || "---"}</div>
+                    <div class="top-1-score">${top1?.count || 0}</div>
+                    <div style="font-size:12px; font-weight:800; letter-spacing:2px; color:var(--primary)">CA TRỰC</div>
+                </div>
+            </div>
+            <div class="top-side">
+                <div class="side-card">
+                    <div class="side-rank">RANK 02</div>
+                    <div class="side-name">${top2?.name || "---"}</div>
+                    <div class="side-score">${top2?.count || 0} <small style="font-size:12px;color:#666">CA</small></div>
+                </div>
+                <div class="side-card">
+                    <div class="side-rank">RANK 03</div>
+                    <div class="side-name">${top3?.name || "---"}</div>
+                    <div class="side-score">${top3?.count || 0} <small style="font-size:12px;color:#666">CA</small></div>
+                </div>
+            </div>
+        `;
+
+        renderList(data.slice(3));
+    }
+
+    function renderList(data) {
+        const listArea = document.getElementById("listArea");
+        listArea.innerHTML = data.map((item, i) => `
+            <div class="row-item">
+                <div class="row-rank">${i + 4}</div>
+                <div>
+                    <div class="row-name">${item.name}</div>
+                    <div class="row-class">${item.mssv} • ${item.class}</div>
+                </div>
+                <div class="row-score">${item.count}</div>
+            </div>
         `).join('');
     }
 
-    function formatName(str) {
-        if (!str) return "";
-        return str.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+    document.getElementById("searchInput").oninput = (e) => {
+        const val = e.target.value.toLowerCase();
+        const filtered = fullData.slice(3).filter(i => i.name.toLowerCase().includes(val));
+        renderList(filtered);
+    };
+
+    function formatName(s) {
+        return s ? s.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : "";
     }
 
-    window.onload = fetchData;
+    init();
 </script>
 </body>
 </html>
