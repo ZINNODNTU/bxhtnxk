@@ -17,21 +17,12 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 50px; }
 
-        body {
-            background: var(--bg);
-            color: #fff;
-            min-height: 100vh;
-            overflow-x: hidden;
-            padding-bottom: 50px;
-        }
-
-        /* Nền Gradient mờ ảo */
         .mesh-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 10% 10%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.15) 0%, transparent 40%);
+            background: radial-gradient(circle at 10% 10%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.15) 0%, transparent 40%);
             z-index: -1;
         }
 
@@ -39,91 +30,112 @@
 
         header { text-align: left; margin: 40px 0; }
         header h1 { 
-            font-size: clamp(2rem, 8vw, 3.5rem); 
-            font-weight: 800; line-height: 1; 
-            letter-spacing: -2px; margin-bottom: 10px;
-            background: linear-gradient(to right, #fff, #666);
+            font-size: clamp(2.2rem, 8vw, 3.5rem); font-weight: 800; line-height: 1.1; 
+            background: linear-gradient(to right, #fff, #888);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+
         .live-tag {
             display: inline-flex; align-items: center; gap: 8px;
             background: rgba(0, 242, 255, 0.1); color: var(--primary);
-            padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 600;
+            padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; margin-bottom: 10px;
         }
         .live-dot { width: 6px; height: 6px; background: var(--primary); border-radius: 50%; animation: pulse 1.5s infinite; }
 
-        /* Top 3 Spotlight */
-        .spotlight {
-            display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 40px;
-        }
-
+        /* Spotlight Layout */
+        .spotlight { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 40px; }
         .top-1-card {
             background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
             border: 1px solid var(--border); border-radius: 32px;
-            padding: 40px; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; justify-content: flex-end;
-            min-height: 350px;
+            padding: 40px; position: relative; overflow: hidden; cursor: pointer;
+            display: flex; flex-direction: column; justify-content: flex-end; min-height: 380px; transition: 0.4s;
         }
+        .top-1-card:hover { border-color: var(--primary); transform: scale(1.01); }
         .top-1-card::before {
             content: "01"; position: absolute; top: -20px; right: -10px;
             font-size: 200px; font-weight: 800; opacity: 0.05; color: var(--gold);
         }
-        .top-1-card .crown { color: var(--gold); font-size: 40px; margin-bottom: 20px; }
-        .top-1-name { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
-        .top-1-score { font-size: 64px; font-weight: 800; color: var(--primary); line-height: 1; }
+        .top-1-score { font-size: 72px; font-weight: 800; color: var(--primary); line-height: 1; }
 
-        .top-side { display: flex; flex-direction: column; gap: 20px; }
         .side-card {
             background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 24px; padding: 20px; flex: 1;
-            display: flex; flex-direction: column; justify-content: center;
+            border-radius: 24px; padding: 25px; flex: 1; cursor: pointer; transition: 0.3s;
         }
-        .side-rank { font-size: 12px; font-weight: 600; color: #888; margin-bottom: 5px; }
-        .side-name { font-size: 18px; font-weight: 700; }
-        .side-score { font-size: 28px; font-weight: 800; color: #fff; }
+        .side-card:hover { border-color: var(--primary); background: rgba(255,255,255,0.06); }
+        .top-side { display: flex; flex-direction: column; gap: 20px; }
 
         /* Search & List */
-        .controls { margin-bottom: 20px; }
+        .controls { margin-bottom: 25px; position: sticky; top: 20px; z-index: 100; }
+        #searchInput {
+            width: 100%; background: rgba(15,15,15,0.8); border: 1px solid var(--border);
+            padding: 18px 20px 18px 55px; border-radius: 20px; color: #fff; outline: none;
+            font-size: 16px; backdrop-filter: blur(10px); transition: 0.3s;
+        }
+        #searchInput:focus { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 242, 255, 0.1); }
         .search-wrapper { position: relative; }
         .search-wrapper i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #555; }
-        #searchInput {
-            width: 100%; background: var(--card-bg); border: 1px solid var(--border);
-            padding: 18px 20px 18px 55px; border-radius: 20px; color: #fff; outline: none;
-            font-size: 16px; transition: 0.3s;
-        }
-        #searchInput:focus { background: rgba(255,255,255,0.05); border-color: var(--primary); }
 
-        .list-container { display: flex; flex-direction: column; gap: 10px; }
         .row-item {
             background: var(--card-bg); border: 1px solid var(--border);
-            padding: 15px 25px; border-radius: 20px;
+            padding: 18px 25px; border-radius: 20px; cursor: pointer;
             display: grid; grid-template-columns: 50px 1fr 100px; align-items: center;
-            transition: 0.3s;
+            transition: 0.3s; margin-bottom: 12px;
         }
-        .row-item:hover { transform: translateX(10px); background: rgba(255,255,255,0.05); border-color: var(--primary); }
-        
+        .row-item:hover { transform: translateX(10px); background: rgba(255,255,255,0.06); border-color: var(--primary); }
         .row-rank { font-weight: 800; color: #444; font-size: 18px; }
-        .row-name { font-weight: 600; font-size: 16px; }
-        .row-class { font-size: 12px; color: #666; }
-        .row-score { text-align: right; font-weight: 800; color: var(--primary); font-size: 20px; }
+        .row-score { text-align: right; font-weight: 800; color: var(--primary); font-size: 22px; }
 
-        /* Loading */
-        #loader {
-            position: fixed; inset: 0; background: var(--bg);
-            display: flex; align-items: center; justify-content: center; z-index: 1000;
+        /* Modal */
+        #detailsModal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px); display: none; align-items: center;
+            justify-content: center; z-index: 2000; padding: 20px;
         }
-        .loader-circle {
-            width: 60px; height: 60px; border: 2px solid var(--border);
-            border-top: 2px solid var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite;
+        .modal-content {
+            background: #0a0a0a; border: 1px solid var(--border);
+            width: 100%; max-width: 500px; border-radius: 32px;
+            padding: 35px; position: relative; animation: slideUp 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+        .close-btn { position: absolute; top: 25px; right: 25px; cursor: pointer; color: #555; font-size: 24px; transition: 0.3s; }
+        .close-btn:hover { color: #fff; }
+
+        /* DANH SÁCH CHI TIẾT (Cập nhật dạng cột) */
+        .detail-list { margin-top: 25px; max-height: 400px; overflow-y: auto; padding-right: 10px; }
+        .detail-item { 
+            padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .detail-date { font-weight: 800; color: #fff; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+        .detail-date i { color: var(--primary); font-size: 14px; }
+        
+        .shift-column {
+            display: flex; flex-direction: column; gap: 8px; width: 100%;
+        }
+        .shift-pill {
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.15);
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .shift-pill::before {
+            content: "•"; margin-right: 8px; opacity: 0.5;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        #loader { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 3000; }
+        .loader-circle { width: 40px; height: 40px; border: 2px solid var(--border); border-top: 2px solid var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         @media (max-width: 768px) {
             .spotlight { grid-template-columns: 1fr; }
-            .top-1-card { min-height: 250px; padding: 30px; }
-            header h1 { font-size: 2.5rem; }
+            .top-1-card { min-height: 300px; }
         }
     </style>
 </head>
@@ -134,128 +146,172 @@
 
 <div class="container">
     <header>
-        <div class="live-tag"><div class="live-dot"></div> DATA LIVE</div>
+        <div class="live-tag"><div class="live-dot"></div> DỮ LIỆU ĐÃ ĐỒNG BỘ</div>
         <h1>Ranking<br>TNXK.</h1>
-        <p style="color: #666; margin-left: 5px;">Hệ thống ghi nhận buổi trực Đoàn Khoa CNTT-TT</p>
+        <p style="color: #666; margin-left: 5px;">Hệ thống ghi nhận trực Đoàn Khoa CNTT-TT</p>
     </header>
 
-    <div class="spotlight" id="spotlightArea">
-        <!-- Render Top 3 theo kiểu Bento -->
-    </div>
+    <div class="spotlight" id="spotlightArea"></div>
 
     <div class="controls">
         <div class="search-wrapper">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Tìm tên thành viên...">
+            <input type="text" id="searchInput" placeholder="Tìm tên hoặc MSSV...">
         </div>
     </div>
 
-    <div class="list-container" id="listArea">
-        <!-- Render Others -->
+    <div class="list-container" id="listArea"></div>
+</div>
+
+<div id="detailsModal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></div>
+        <h2 id="modalName" style="font-size: 26px; font-weight: 800;"></h2>
+        <p id="modalInfo" style="color: #666; font-size: 14px; margin-top: 5px;"></p>
+        <div class="detail-list" id="modalDetails"></div>
     </div>
 </div>
 
 <script>
-    const URL_STUDENTS = "https://opensheet.elk.sh/1hd1-8lo1DxPOGrPwizlvcF7xPdyu9_dzvzwyziGjmfE/Câu trả lời biểu mẫu 1";
-    const URL_TNXK = "https://opensheet.elk.sh/1WagQ3FSkESeaYWZurfH2XmjXKB7TdSTxa29k4-nNceM/TONG HOP";
+    const SHEET_ID = "1WagQ3FSkESeaYWZurfH2XmjXKB7TdSTxa29k4-nNceM";
+    const URL_DATA = `https://opensheet.elk.sh/${SHEET_ID}/KET%20QUA`;
 
-    let fullData = [];
+    let leaderData = [];
 
     async function init() {
-        try {
-            const [resS, resT] = await Promise.all([
-                fetch(URL_STUDENTS).then(r => r.json()),
-                fetch(URL_TNXK).then(r => r.json())
-            ]);
+    try {
+        const response = await fetch(URL_DATA);
+        const rawData = await response.json();
+        const grouped = {};
 
-            const studentMap = {};
-            resS.forEach(s => {
-                const mssv = s["Mã số sinh viên:"]?.toString().trim();
-                if (mssv) studentMap[mssv] = { name: formatName(s["Họ Tên:"]), class: s["Chi đoàn trực thuộc:"] };
-            });
+        rawData.forEach(row => {
+            const mssv = row["MSSV"]?.toString().trim();
+            const diemDanh = row["Điểm danh"]?.toString().toLowerCase().trim();
 
-            const scoreMap = {};
-            resT.forEach(row => {
-                const mssv = row["MSSV"]?.toString().trim();
-                if (!mssv) return;
-                let count = 0;
-                Object.keys(row).forEach(k => {
-                    if (!["MSSV", "Họ Tên", "Lớp", "STT"].some(ex => k.includes(ex))) {
-                        const v = row[k]?.toString().toLowerCase();
-                        if (v === 'x' || v === '1' || v === 'v') count++;
-                    }
-                });
-                scoreMap[mssv] = (scoreMap[mssv] || 0) + count;
-            });
+            if (!mssv) return;
 
-            fullData = Object.keys(scoreMap)
-                .filter(mssv => studentMap[mssv])
-                .map(mssv => ({ mssv, count: scoreMap[mssv], ...studentMap[mssv] }))
-                .filter(i => i.count > 0)
-                .sort((a, b) => b.count - a.count);
+            // 🔥 Tạo trước nếu chưa có
+            if (!grouped[mssv]) {
+                grouped[mssv] = {
+                    mssv: mssv,
+                    name: formatName(row["Họ tên"]),
+                    khoa: row["Khoa"],
+                    lop: row["Lớp"],
+                    count: 0,
+                    history: {}
+                };
+            }
 
-            renderUI(fullData);
-            document.getElementById("loader").style.display = "none";
-        } catch (e) { console.error(e); }
+            // ✅ Chỉ đếm khi hợp lệ
+            if (diemDanh === 'x' || diemDanh === '1' || diemDanh === 'v') {
+                grouped[mssv].count++;
+
+                const ngay = row["Ngày"] || "N/A";
+                const ca = row["Ca"] || "N/A";
+
+                if (!grouped[mssv].history[ngay]) {
+                    grouped[mssv].history[ngay] = [];
+                }
+
+                grouped[mssv].history[ngay].push(ca);
+            }
+        });
+
+        leaderData = Object.values(grouped)
+            .filter(i => i.count > 0) // 🔥 lọc người có trực
+            .sort((a, b) => b.count - a.count);
+
+        renderUI(leaderData);
+        document.getElementById("loader").style.display = "none";
+
+    } catch (e) {
+        console.error("Lỗi:", e);
     }
-
+}
     function renderUI(data) {
         const spotlightArea = document.getElementById("spotlightArea");
-        const listArea = document.getElementById("listArea");
-
-        const top1 = data[0];
-        const top2 = data[1];
-        const top3 = data[2];
+        const [top1, top2, top3] = data;
 
         spotlightArea.innerHTML = `
-            <div class="top-1-card">
-                <i class="fa-solid fa-crown crown"></i>
+            <div class="top-1-card" onclick="showDetails('${top1?.mssv}')">
+                <i class="fa-solid fa-crown" style="color:var(--gold); font-size:40px; margin-bottom:20px"></i>
                 <div>
-                    <div class="top-1-name">${top1?.name || "---"}</div>
-                    <div style="color:#888; font-size:14px; margin-bottom:15px">${top1?.class || "---"}</div>
+                    <div style="font-size: 32px; font-weight: 800; line-height: 1.2;">${top1?.name || "---"}</div>
+                    <div style="color:#888; font-size:14px; margin-bottom:15px; margin-top:5px">${top1?.khoa || "---"}</div>
                     <div class="top-1-score">${top1?.count || 0}</div>
-                    <div style="font-size:12px; font-weight:800; letter-spacing:2px; color:var(--primary)">CA TRỰC</div>
+                    <div style="font-size:12px; font-weight:800; letter-spacing:2px; color:var(--primary)">TỔNG CA TRỰC</div>
                 </div>
             </div>
             <div class="top-side">
-                <div class="side-card">
-                    <div class="side-rank">RANK 02</div>
-                    <div class="side-name">${top2?.name || "---"}</div>
-                    <div class="side-score">${top2?.count || 0} <small style="font-size:12px;color:#666">CA</small></div>
+                <div class="side-card" onclick="showDetails('${top2?.mssv}')">
+                    <div style="font-size:12px; font-weight:600; color:#888; margin-bottom:5px">RANK 02</div>
+                    <div style="font-size:18px; font-weight:700;">${top2?.name || "---"}</div>
+                    <div style="font-size:28px; font-weight:800; margin-top:5px">${top2?.count || 0} <small style="font-size:12px;color:#666">CA</small></div>
                 </div>
-                <div class="side-card">
-                    <div class="side-rank">RANK 03</div>
-                    <div class="side-name">${top3?.name || "---"}</div>
-                    <div class="side-score">${top3?.count || 0} <small style="font-size:12px;color:#666">CA</small></div>
+                <div class="side-card" onclick="showDetails('${top3?.mssv}')">
+                    <div style="font-size:12px; font-weight:600; color:#888; margin-bottom:5px">RANK 03</div>
+                    <div style="font-size:18px; font-weight:700;">${top3?.name || "---"}</div>
+                    <div style="font-size:28px; font-weight:800; margin-top:5px">${top3?.count || 0} <small style="font-size:12px;color:#666">CA</small></div>
                 </div>
             </div>
         `;
-
         renderList(data.slice(3));
     }
 
     function renderList(data) {
         const listArea = document.getElementById("listArea");
         listArea.innerHTML = data.map((item, i) => `
-            <div class="row-item">
+            <div class="row-item" onclick="showDetails('${item.mssv}')">
                 <div class="row-rank">${i + 4}</div>
                 <div>
-                    <div class="row-name">${item.name}</div>
-                    <div class="row-class">${item.mssv} • ${item.class}</div>
+                    <div class="row-name" style="font-weight:600; color:#eee;">${item.name}</div>
+                    <div style="font-size:12px; color:#555; margin-top:2px;">${item.mssv} • ${item.lop}</div>
                 </div>
                 <div class="row-score">${item.count}</div>
             </div>
         `).join('');
     }
 
+    // Cập nhật hàm hiển thị chi tiết (Dạng cột)
+    function showDetails(mssv) {
+        const person = leaderData.find(p => p.mssv === mssv);
+        if (!person) return;
+
+        document.getElementById("modalName").innerText = person.name;
+        document.getElementById("modalInfo").innerText = `${person.mssv} • ${person.lop}`;
+        
+        const detailsContainer = document.getElementById("modalDetails");
+        
+        // Render lịch sử trực theo cột dọc
+        detailsContainer.innerHTML = Object.entries(person.history).map(([date, shifts]) => `
+            <div class="detail-item">
+                <div class="detail-date">
+                    <i class="fa-solid fa-calendar-day"></i> ${date}
+                </div>
+                <div class="shift-column">
+                    ${shifts.map(ca => `<div class="shift-pill">${ca}</div>`).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        document.getElementById("detailsModal").style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("detailsModal").style.display = "none";
+    }
+
     document.getElementById("searchInput").oninput = (e) => {
         const val = e.target.value.toLowerCase();
-        const filtered = fullData.slice(3).filter(i => i.name.toLowerCase().includes(val));
-        renderList(filtered);
+        const filtered = leaderData.filter(i => 
+            i.name.toLowerCase().includes(val) || i.mssv.includes(val)
+        );
+        renderList(filtered.length > 3 ? filtered.slice(3) : filtered);
     };
 
     function formatName(s) {
-        return s ? s.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : "";
+        if (!s) return "N/A";
+        return s.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     }
 
     init();
